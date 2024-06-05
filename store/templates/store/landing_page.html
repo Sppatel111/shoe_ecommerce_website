@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoe Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css">
+    <style>
+        .hero {
+            background-image: url('https://source.unsplash.com/1600x900/?shoes'); 
+            background-size: cover;
+            background-position: center;
+            height: 680px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            color: #333;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #2c3e50; /* Flatly primary color */
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50; /* Flatly primary color */
+        }
+
+        .try-now-btn {
+            background-color: #2c3e50; /* Flatly primary color */
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .brand-large {
+            font-size: 1.75rem;
+        }
+
+        .accordion-title {
+            cursor: pointer;
+            padding: 15px;
+            background: #2c3e50; /* Flatly primary color */
+            color: #fff;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1.25rem;
+        }
+
+        .accordion-title:hover {
+            background: #1e2b37; /* hover color */
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            text-align: center;
+        }
+
+        .accordion-content.open {
+            max-height: 200px;
+        }
+
+        footer {
+            background-color: #2c3e50; /* Flatly primary color */
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        footer ul li {
+            margin: 0 10px;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand brand-large" href="/">Shoe Shop</a> <!-- Added custom class 'brand-large' -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#faq">FAQs</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Page (Hero Section) -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h2 class="hero-title">Step into Style</h2>
+            <p class="hero-subtitle">Welcome to the Ultimate Shoe Shopping Experience</p>
+            <a href="/home" class="btn btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about py-5">
+        <div class="container">
+            <h2 class="text-center">About Shoe Shop</h2>
+            <p class="text-center">Welcome to Shoe Shop, your ultimate destination for the latest trends in footwear. Our extensive collection features a variety of styles to suit every occasion, from casual sneakers to elegant heels. We pride ourselves on offering high-quality shoes at competitive prices, ensuring you find the perfect pair to complement your style.</p>
+            <p class="text-center">At Shoe Shop, we understand the importance of both comfort and fashion. That's why our collection includes shoes that not only look great but also feel fantastic on your feet. Whether you're stepping out for a special event or just need a reliable pair for everyday wear, we've got you covered.</p>
+            <p class="text-center">Our platform is designed to provide a seamless shopping experience. With easy navigation, detailed product descriptions, and customer reviews, finding your next favorite pair of shoes has never been easier. Join our community of shoe lovers and discover the joy of shopping with Shoe Shop. Elevate your footwear game today!</p>
+        </div>
+    </section>
+
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center">Frequently Asked Questions</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <h3 class="accordion-title">Q: What types of shoes do you offer?</h3>
+                    <div class="accordion-content">
+                        <p>We offer a wide range of shoes including sneakers, formal shoes, boots, sandals, and more.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-title">Q: How can I track my order?</h3>
+                    <div class="accordion-content">
+                        <p>You can track your order through your account on our website or by using the tracking link sent to your email.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-title">Q: Do you offer free shipping?</h3>
+                    <div class="accordion-content">
+                        <p>Yes, we offer free shipping on orders above a certain amount. Please check our shipping policy for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>Contact Details</p>
+                        <ul class="list-unstyled">
+                            <li>
+                                <strong>Phone:</strong> +91 1234567890 &nbsp; | &nbsp;
+                                <strong>Email:</strong> contact@shoeshop.com &nbsp; | &nbsp;
+                                <strong>Address:</strong> Fashion City.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 text-center mt-3">
+                        <p>&copy; 2024 Shoe Shop.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const accordionTitles = document.querySelectorAll('.accordion-title');
+
+            accordionTitles.forEach(title => {
+                title.addEventListener('click', () => {
+                    const accordionItem = title.parentElement;
+                    const accordionContent = accordionItem.querySelector('.accordion-content');
+
+                    accordionContent.classList.toggle('open');
+                    accordionContent.style.maxHeight = accordionContent.classList.contains('open') ? accordionContent.scrollHeight + "px" : "0";
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

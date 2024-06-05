@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #2c3e50; /* Flatly primary color */
+        }
+
+        .container {
+            flex: 1;
+            margin-top: 20px;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h5 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .cart-item-details p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        .cart-item-details .price {
+            font-weight: bold;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .cart-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cart-item-actions {
+            text-align: right;
+        }
+
+        footer {
+            background-color: #2c3e50; /* Flatly primary color */
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Shoe Shop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/#about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart">Cart</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="cart-header">
+        <h1>Your Cart</h1>
+    </div>
+    <ul class="cart-items">
+        {% for item in cart.cartitem_set.all %}
+            <li class="cart-item">
+                <img src="{{ item.shoe.image }}" alt="{{ item.shoe.name }}">
+                <div class="cart-item-details">
+                    <h5>{{ item.shoe.name }}</h5>
+                    <p>{{ item.shoe.description }}</p>
+                    <p>Size: {{ item.shoe.size }}</p>
+                    <p class="price">₹{{ item.shoe.price }} x {{ item.quantity }}</p>
+                    <div class="cart-item-actions">
+                        <form action="{% url 'remove_from_cart' item.id %}" method="post" style="display:inline-block;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                        <form action="{% url 'add_to_cart' item.shoe.id %}" method="post" style="display:inline-block;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">Add More</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="cart-total">
+        <p>Total: ₹{{ cart.get_total_price }}</p>
+    </div>
+    <div class="cart-actions">
+        <form action="{% url 'checkout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">Checkout</button>
+        </form>
+        <p class="mt-3"><a href="{% url 'home_page' %}" class="btn btn-secondary">Continue Shopping</a></p>
+    </div>
+</div>
+
+<footer class="footer mt-auto">
+    <div class="container">
+        <span>&copy; 2024 Shoe Shop.</span>
+    </div>
+</footer>
+</body>
+</html>
