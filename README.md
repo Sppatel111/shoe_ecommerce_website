@@ -27,9 +27,9 @@ The workflow involves:
 
 ## Demo
 
-![Demo](/static/demo.gif)
+![Demo](/store/static/demo.gif)
 
-[Download Demo Video](static/demo.mp4)
+[Download Demo Video](/store/static/demo.mp4)
 
 ## Usage
 
