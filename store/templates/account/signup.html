@@ -1,13 +1,56 @@
-<!-- your_app/templates/account/signup.html -->
-{% extends "base.html" %}
-
-{% block title %}Sign Up{% endblock %}
-
-{% block content %}
-<h2>Sign Up</h2>
-<form method="post" action="{% url 'account_signup' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Sign Up</button>
-</form>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .login-link {
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Sign Up</h2>
+            <form method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <a href="{% url 'account_login' %}" class="login-link">Already have an account? Login here</a>
+        </div>
+    </div>
+</body>
+</html>

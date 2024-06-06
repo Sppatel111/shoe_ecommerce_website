@@ -8,6 +8,7 @@ from django.views import View
 from .models import Category, Shoe, Cart, CartItem, Order
 import stripe
 
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def landing_page(request):
@@ -131,15 +132,10 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
-from django.http import FileResponse
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+
 from reportlab.lib import colors
 
-from django.http import FileResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.lib import colors
 
 @login_required
 def generate_pdf_bill(order):

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from .views import order_report
 
+
 urlpatterns = [
     path('', views.landing_page, name='landing_page'),
     path('home/', views.home_page, name='home_page'),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('create-checkout-session/', views.CreateCheckoutSessionView.as_view(), name='create-checkout-session'),  # Add this line
     path('view-pdf-bill/<int:order_id>/', views.view_pdf_bill, name='view_pdf_bill'),
     path('order-report/', order_report, name='order_report'),
+    
 ]
 
 from django.conf import settings
