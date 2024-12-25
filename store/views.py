@@ -122,31 +122,28 @@ def order_placed(request):
     except Order.DoesNotExist:
         return render(request, 'store/order_placed.html')
 
-
+from io import BytesIO
 from django.http import FileResponse
-
-import io
 from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
 from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-
-from reportlab.lib.pagesizes import letter
-
-from reportlab.lib import colors
-
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 @login_required
 def generate_pdf_bill(order):
-    response = io.BytesIO()
+    response = BytesIO()
 
     doc = SimpleDocTemplate(response, pagesize=letter)
     elements = []
 
-    # Title
-    title = "Order Invoice"
-    elements.append([title])
+    # Heading - Added a title above the table
+    styles = getSampleStyleSheet()
+    title = Paragraph("<b>Order Invoice</b>", styles['Title'])
+    elements.append(title)
+    elements.append(Paragraph("<br/>", styles['Normal']))  # Space between title and table
 
     # Order Information
     order_info = [
@@ -154,43 +151,51 @@ def generate_pdf_bill(order):
         ["Order Date:", f"{order.created_at.strftime('%Y-%m-%d %H:%M:%S')}"],  # assuming you have created_at field in Order
         ["Total Amount Paid:", f"Rs.{order.shoe.price * order.quantity}"],
     ]
-    elements.append(order_info)
+    order_table = Table(order_info, colWidths=[2 * inch, 4 * inch])
+    order_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    elements.append(order_table)
 
     # Shoe Information
     shoe_info = [
         ["Shoe Name:", order.shoe.name],
-        ["Description:", order.shoe.description],
+        ["Description:", Paragraph(order.shoe.description, styles['BodyText'])],  # Wrapping the description
         ["Size:", order.shoe.size],
         ["Price:", f"Rs.{order.shoe.price}"],
         ["Quantity:", order.quantity],
         ["Subtotal:", f"Rs.{order.shoe.price * order.quantity}"],
     ]
-    elements.append(shoe_info)
 
-    # Build PDF
-    table_style = TableStyle([
+    # Table for shoe info with automatic text wrapping for description
+    shoe_table = Table(shoe_info, colWidths=[2 * inch, 4 * inch])
+    shoe_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
-    ])
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Align text to the top of the cell
+    ]))
 
-    for i, element in enumerate(elements):
-        table = Table(element, colWidths=[2 * inch, 4 * inch])
-        if i == 0:
-            table.setStyle(TableStyle([('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold')]))
-        else:
-            table.setStyle(table_style)
-        elements[i] = table
+    elements.append(shoe_table)
 
+    # Build PDF
     doc.build(elements)
 
     response.seek(0)
     return response
+
 
 @login_required
 def view_pdf_bill(request, order_id):
