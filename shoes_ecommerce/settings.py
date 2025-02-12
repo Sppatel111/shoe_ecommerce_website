@@ -20,11 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4a4$ng$$^*9+wt(nn7m#_zwakutk3xi7tu8by7@850a84zem38'
+SECRET_KEY = ''
 
 # shoes_ecommerce/settings.py
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51PLeGJ02pF8QgxyHE4v9uVdev07njuzEYhMDjVuTGxzv9EBqEW4636HIfQq2ZrW43O2MdI3ZIrrGQvRKW7jDwCrt00JAOm05s3'
-STRIPE_SECRET_KEY = 'sk_test_51PLeGJ02pF8QgxyHKmAoewHXQByZh6imMbtHcbGKUGjXGTfxoWHnbpdJ5eb0dgh7PdEDf2R93FRKHy4bLarU7W6C00e2kaNgYF'
+STRIPE_PUBLISHABLE_KEY = ''
+STRIPE_SECRET_KEY =''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
